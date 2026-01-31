@@ -24,8 +24,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 _inputVector3 = new Vector3(_moveInput.x, 0, _moveInput.y);
 
-        _movementDirection = Quaternion.Euler(0, _cameraYaw.eulerAngles.y, 0) * _moveInput;
+        _movementDirection = Quaternion.Euler(0, _cameraYaw.eulerAngles.y, 0) * _inputVector3;
 
         if (_movementDirection != Vector3.zero)
         {
@@ -33,12 +34,18 @@ public class PlayerController : MonoBehaviour
         }
         HandlePlayerMovement();
 
+        if(_movementDirection.sqrMagnitude > .01f)
+        {
+            Quaternion _targetRotation = Quaternion.LookRotation(_movementDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, 10f * Time.deltaTime);
+        }
+
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
-        Debug.Log("Move Input: " + _moveInput);
+        //Debug.Log("Move Input: " + _moveInput);
     }
     public void OnJump(InputAction.CallbackContext context)
     { 

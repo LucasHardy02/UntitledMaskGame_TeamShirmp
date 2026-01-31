@@ -1,12 +1,31 @@
 using UnityEngine;
-using Unity.VisualScripting;
+using UnityEngine.InputSystem;
+
 public class CameraController : MonoBehaviour
 {
-    public GameObject _player;
+    public Transform _player;
+    public Vector3 _offset = new Vector3(1f, .7f, -3f);
+    public float _rotationSpeed = 5f;
+    public Vector2 _lookInput;
 
-    private float _rotationSpeed = 5f;
-    private float _smoothSpeed = 5f;
+    private float yaw;
+    private float pitch;
 
+    private void LateUpdate()
+    {
+        yaw += _lookInput.x * _rotationSpeed * Time.deltaTime;
+        pitch -= _lookInput.y * _rotationSpeed * Time.deltaTime;
+        pitch = Mathf.Clamp(pitch, -35f, 60f);
 
+        Quaternion _rotation = Quaternion.Euler(pitch, yaw, 0);
+        Vector3 _desiredPosition = _player.position + _rotation * _offset;
 
+        transform.position = Vector3.Lerp(transform.position, _desiredPosition, Time.deltaTime * 10f);
+        transform.LookAt(_player.position + Vector3.up * 1.5f);
+    }
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        _lookInput = context.ReadValue<Vector2>();
+    }
 }
