@@ -17,8 +17,8 @@ public class CameraController : MonoBehaviour
         pitch -= _lookInput.y * _rotationSpeed * Time.deltaTime;
         pitch = Mathf.Clamp(pitch, -35f, 60f);
 
-        Quaternion _rotation = Quaternion.Euler(pitch, yaw, 0);
-        Vector3 _desiredPosition = _player.position + _rotation * _offset;
+        Quaternion _yawRotation = Quaternion.Euler(pitch, yaw, 0);
+        Vector3 _desiredPosition = _player.position + _yawRotation * _offset;
 
         transform.position = Vector3.Lerp(transform.position, _desiredPosition, Time.deltaTime * 10f);
         transform.LookAt(_player.position + Vector3.up * 1.5f);

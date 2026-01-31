@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public float _jumpForce = 5f;
     public Vector2 _moveInput;
     public Vector3 _jumpInput;
-    private Transform _cameraYaw;
+    [SerializeField] private Transform _cameraYaw;
     private Vector3 _movementDirection;
     private Vector3 _inputVector;
 
@@ -24,20 +24,23 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 _inputVector3 = new Vector3(_moveInput.x, 0, _moveInput.y);
+        Vector3 _camForward = _cameraYaw.forward;
+        Vector3 _camRight = _cameraYaw.right;
 
-        _movementDirection = Quaternion.Euler(0, _cameraYaw.eulerAngles.y, 0) * _inputVector3;
+        _camForward.y = 0;
+        _camRight.y = 0;
 
-        if (_movementDirection != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(_movementDirection);
-        }
-        HandlePlayerMovement();
+        _camForward.Normalize();
+        _camRight.Normalize();
 
-        if(_movementDirection.sqrMagnitude > .01f)
+        _movementDirection = _camForward * _moveInput.y + _camRight * _moveInput.x;
+
+        if (_movementDirection.sqrMagnitude > .01f)
         {
             Quaternion _targetRotation = Quaternion.LookRotation(_movementDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, 10f * Time.deltaTime);
+            _rb.rotation = Quaternion.Slerp(_rb.rotation, _targetRotation, 10f * Time.fixedDeltaTime);
+
+            _rb.MovePosition(_rb.position + _movementDirection * _walkSpeed * Time.fixedDeltaTime);
         }
 
     }
@@ -48,16 +51,11 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Move Input: " + _moveInput);
     }
     public void OnJump(InputAction.CallbackContext context)
-    { 
-        if(context.performed)
+    {
+        if (context.performed)
         {
-            _rb.AddForce(new Vector3(0,_jumpForce,0), ForceMode.Impulse);
+            _rb.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
         }
         Debug.Log("Jump Input: " + _jumpInput);
-    }
-
-    public void HandlePlayerMovement()
-    {
-        _rb.MovePosition(_rb.position + _movementDirection * _walkSpeed * Time.fixedDeltaTime);
     }
 }

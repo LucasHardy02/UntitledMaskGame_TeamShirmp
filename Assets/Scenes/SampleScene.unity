@@ -521,7 +521,6 @@ GameObject:
   - component: {fileID: 628443195}
   - component: {fileID: 628443194}
   - component: {fileID: 628443193}
-  - component: {fileID: 628443198}
   - component: {fileID: 628443202}
   - component: {fileID: 628443201}
   - component: {fileID: 628443199}
@@ -653,18 +652,6 @@ Transform:
   - {fileID: 1900991764}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &628443198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 628443192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ad063d159baf434aa1901bd4773ce78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &628443199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -838,6 +825,7 @@ MonoBehaviour:
   _jumpForce: 5
   _moveInput: {x: 0, y: 0}
   _jumpInput: {x: 0, y: 0, z: 0}
+  _cameraYaw: {fileID: 1044134545}
 --- !u!1 &675112823 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3870653636753065247, guid: 54edf9f04039c324ca22be91ddcff043, type: 3}
@@ -855,7 +843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292f4f87dc1f7d1438ec3c351a4c62b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _conversation: {fileID: 0}
+  _conversation: {fileID: 1450890565}
   _pauseScript: {fileID: 0}
 --- !u!1 &754860731
 GameObject:
@@ -940,6 +928,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogueTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 3870653636753065247, guid: 54edf9f04039c324ca22be91ddcff043, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1427881997541397645, guid: 54edf9f04039c324ca22be91ddcff043, type: 3}
     m_RemovedGameObjects: []
@@ -1013,7 +1005,7 @@ GameObject:
   - component: {fileID: 1044134541}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1032,7 +1024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 628443197}
   _offset: {x: 1, y: 0.7, z: -3}
-  _rotationSpeed: 5
+  _rotationSpeed: 30
   _lookInput: {x: 0, y: 0}
 --- !u!114 &1044134542
 MonoBehaviour:
