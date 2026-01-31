@@ -12,10 +12,27 @@ public class PlayerController : MonoBehaviour
     public float _jumpForce = 5f;
     public Vector2 _moveInput;
     public Vector3 _jumpInput;
+    private Transform _cameraYaw;
+    private Vector3 _movementDirection;
+    private Vector3 _inputVector;
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+        _cameraYaw = Camera.main.transform;
+    }
 
     void FixedUpdate()
     {
+
+        _movementDirection = Quaternion.Euler(0, _cameraYaw.eulerAngles.y, 0) * _moveInput;
+
+        if (_movementDirection != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(_movementDirection);
+        }
         HandlePlayerMovement();
+
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -34,6 +51,6 @@ public class PlayerController : MonoBehaviour
 
     public void HandlePlayerMovement()
     {
-        _rb.MovePosition(_rb.position + new Vector3(_moveInput.x, 0, _moveInput.y) * _walkSpeed * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + _movementDirection * _walkSpeed * Time.fixedDeltaTime);
     }
 }
