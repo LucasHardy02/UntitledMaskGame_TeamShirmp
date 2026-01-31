@@ -1,27 +1,22 @@
 using UnityEngine;
-
+using Unity.VisualScripting;
 public class CameraController : MonoBehaviour
 {
-    public GameObject _player;
+    public Transform _player;
 
-    public float _smoothSpeed = 0.125f;
     public float _rotationSpeed = 5.0f;
 
-    public Vector3 _offset;
-    public Vector3 _desiredOffset;
-    void Start()
-    {
-        _offset = transform.position - _player.transform.position;
-        _desiredOffset = _offset;
-    }
+    private float _mouseX, _mouseY;
 
     void LateUpdate()
     {
-        transform.position = _offset + _player.transform.position;
-        if (Input.GetMouseButton(1))
-        {
-            float horizontalLook = Input.GetAxis("Mouse X") * _rotationSpeed;
-            _desiredOffset = Quaternion.AngleAxis(horizontalLook, Vector3.up) * _desiredOffset;
-        }
+
+        _mouseX = Input.GetAxis("Mouse X") * _rotationSpeed;
+        _mouseY = Input.GetAxis("Mouse Y") * _rotationSpeed;
+
+        _mouseY = Mathf.Clamp(_mouseY, -15f, 15f);
+
+        transform.rotation = Quaternion.Euler(_mouseY, _mouseX, 0);
+        transform.position = _player.position + transform.rotation * new Vector3(1, (float) 0.7, -3);
     }
 }
