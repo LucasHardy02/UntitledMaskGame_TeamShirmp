@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator _animator;
     public Rigidbody _rb;
     public float _walkSpeed = 5f;
     public float _jumpForce = 5f;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _cameraYaw;
     private Vector3 _movementDirection;
     private Vector3 _inputVector;
+    private bool _isGrounded = true;
 
     private void Awake()
     {
@@ -52,10 +54,33 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && _isGrounded)
         {
             _rb.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
+            _isGrounded = false;
         }
-        Debug.Log("Jump Input: " + _jumpInput);
+        //Debug.Log("Jump Input: " + _jumpInput);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            foreach(ContactPoint contact in collision.contacts)
+            {
+                if(Vector3.Angle(contact.normal, Vector3.up) < 45f)
+                {
+                    _isGrounded = true;
+                }
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = false;
+        }
     }
 }
